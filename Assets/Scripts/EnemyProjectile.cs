@@ -14,11 +14,13 @@ public class EnemyProjectile : MonoBehaviour
         direction = PlayerController.instance.transform.position - transform.position;
         direction.Normalize();
         direction = direction * projectileSpeed;
+        //Added, set velocity once!
+        rb.velocity = direction * projectileSpeed;
     }
 
     void Update()
     {
-        rb.velocity = direction * projectileSpeed;
+        //rb.velocity = direction * projectileSpeed; //No reason to set this every frame, bullet is Kinematic, no drag to slow it down.
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -28,7 +30,7 @@ public class EnemyProjectile : MonoBehaviour
             PlayerController.instance.TakeDamage(damageAmount);
             Destroy(gameObject, 5f);
         }
-        if(other.tag == "Level")
+        if (other.tag == "Level")
         {
             Destroy(gameObject);
         }

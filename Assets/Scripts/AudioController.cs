@@ -9,6 +9,12 @@ public class AudioController : MonoBehaviour
 
     private void Awake()
     {
+        //Jenny: Safety optimization, otherwise two game managers would be very hard to control.
+        if (instance != null)
+        {
+            Debug.LogError("Two GameManagers Active!");
+            DestroyImmediate(this.gameObject);
+        }
         instance = this;
     }
 

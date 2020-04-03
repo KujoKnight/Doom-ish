@@ -33,6 +33,8 @@ public class PlayerController : MonoBehaviour
     public GameObject deathScreen;
     private bool isDead;
 
+    private Vector3 move = Vector3.zero;
+
     //UI Text
     public TextMeshProUGUI healthText, ammoText;
 
@@ -57,9 +59,13 @@ public class PlayerController : MonoBehaviour
         {
             //Movement Controls
             moveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-            Vector3 moveHoriz = transform.up * -moveInput.x;
-            Vector3 moveVert = transform.right * moveInput.y;
-            rb.velocity = (moveHoriz + moveVert) * moveSpeed;
+            //Vector3 moveHoriz = transform.up * -moveInput.x;
+            //Vector3 moveVert = transform.right * moveInput.y;
+
+            //Collected all the calculations into one vector.
+            move = transform.up * -moveInput.x + transform.right * moveInput.y;
+
+            rb.velocity = move * moveSpeed;
 
             //View Controls
             mouseInput = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y") * mouseSensitivity);
@@ -90,7 +96,7 @@ public class PlayerController : MonoBehaviour
                 }
             }
 
-            if(moveInput != Vector2.zero)
+            if (moveInput != Vector2.zero)
             {
                 cameraAnim.SetBool("IsMoving", true);
             }
@@ -104,7 +110,7 @@ public class PlayerController : MonoBehaviour
     public void TakeDamage(int damageAmount)
     {
         currentHealth -= damageAmount;
-        if(currentHealth <= 0)
+        if (currentHealth <= 0)
         {
             deathScreen.SetActive(true);
             isDead = true;
